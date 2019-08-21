@@ -1,0 +1,290 @@
+---
+title: 'Intro to R for IDM : R fundamentals'
+output:
+  html_document: 
+    df_print: paged
+    
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+This document is developed as a reference guide for the R you will need for the Infectious Disease Modelling specialisation as part of the GMPH.
+
+R code within text looks like this: ```x <- 7```.  
+Functions will be referred to like this: `function()` (they'll always have parentheses after the function name)  
+You should be able to copy and paste code from here into your own R script.
+
+#### Things to know:
+
+No-one is expected to memorise everything; the most important skill we can encourage is how to look up how to do things. With some basic concepts you can do everything you need to for the IDM course.
+
+Keep in mind that like human languages, other programming languages have similarities and differences; you may have prior knowledge about how other languages do things - or you might find this out in the future.
+
+In general, if you think a programming language has some strange syntax or weird function names etc, or does things you think are odd, remember that this might be due to:  
+* historical reasons - a language evolves as people develop it, and it's not always totally logical
+* speed optimisation
+* storage optimisation (storage used to be expensive!)
+* other implementation reasons
+  
+R was developed for statistics; some aspects of R can be traced to this history.
+
+##### When writing your own code:
+Put ```#comments``` for yourself - and whoever else has to use your code - everywhere!  
+Aim for consistency in formatting and variable naming:  
+
+* R does not enforce particular formatting, but without doing things like indenting your code where appropriate, it's terrible to read, and even harder to find problems or make changes.  
+* Variable names: bear in mind R is case-sensitive. snake_case (words separated by underscores) is recommended often for variable names; you can't have spaces, and separating with dots is used in other contexts in R (importantly, function names) so it can cause confusion.
+
+
+#### Things not covered here:
+
+Many general, basic concepts in programming are not covered (or not in detail): of note,
+
+* if/else statements and loops
+* 
+
+## R and RStudio
+
+**Install R** from: (https://cran.r-project.org/) (searching R download should find this)
+
+**Install** the free version of **RStudio** from: (https://www.rstudio.com/products/rstudio/download/).  
+
+Rstudio is an Integrated Development Environment (IDE) for R; this means that it adds loads of useful features to your programming experience.
+The panels in an Rstudio window can show what variables you've created, what packages are loaded, etc.
+IDEs also help you make your code easier to read: comments and function names are detected and coloured, and code can be formatted automatically.  
+They even help you find errors in your code!
+
+
+## Data Types
+
+R has 6 atomic types: 4 commonly used. 
+Called atomic because they are "fundamental"; they can be the building blocks for other types.
+
+* logical: ```TRUE``` or ```FALSE```
+* numeric types:
+    * integer  
+    * double (short for: double precision floating point)
+    * complex (rare, just for complex numbers)
+* character
+* raw (rare)
+
+The type ```factor``` (you may remember this from the statistics module) is a special type; we'll come to that later.
+
+We'll illustrate the common types using the simplest **data structure**:  *vectors*. All *elements* in a vector must be of one type.
+```{r}
+# the function "c()" combines what you provide it. By default, it makes a vector.
+
+#4 common atomic types
+logical_v <- c(TRUE, FALSE, TRUE, TRUE, FALSE) # can be abbreviated to T and F
+double_v  <- c(1.5, 2.7, 3.14, 0.05, -25, 5)
+char_v    <- c("abc", "def") # character elements are always within quotes
+
+int_v     <- c(2, 4, 6, 8, -5) # doesn't actually make an integer vector
+typeof(int_v) # it's a double
+# to make an integer vector, you can either:
+int_v     <- as.integer(int_v)
+int_v     <- c(2L, 4L) # the L stands for long
+
+```
+#### Missing values: NA
+```NA``` represents missing values in R (equivalent of SQL's *NULL*). It is important to distinguish between "missing" and "blank". Missing values often have to be specially considered, or removed. 
+
+
+#### Coercion
+Many programming languages force you to define your data type when you declare a variable. R does not require this.
+When you don't specify a type, R will decide what it is. This can make getting started very quick, but can hide issues if you make a mistake, or if you don't know what R automatically decides. ```int_v <- c(2, 4, 6, 8, -5)``` did not create an integer vector, even though all the elements looked like integers. R made a ```double``` vector.
+You have to tell R specifically to treat whole numbers as integers.
+
+```{r}
+#What does R do with this?
+stuff <- c(3, 4, TRUE, "cat")
+```
+A function often expects certain data types and structures as inputs; R will try to *coerce* what you give it into what it expects.
+
+
+```{r}
+#The function "paste()" expects character inputs. What happens if you feed it numbers?
+paste(3,4,5) # the output is a character vector (with one element); you can tell because the element is in quotes
+#> [1] "3 4 5"
+
+# Try taking the mean() of a character vector:
+mean(char_v)
+#> argument is not numeric or logical: returning NA[1] NA
+
+```
+
+## Data Structures
+
+###**Vectors and matrices**
+
+#### Selecting elements: []
+
+Square brackets select elements:
+```{r}
+double_v[2] # returns the second element. 
+# Many other languages count from 0, so the second element would be [1].
+
+# you can select more than one element, using a vector within your square brackets:
+double_v[c(3,4,5)]
+
+# multiple dimensions: 
+# to select from a matrix, you can use a single number, 
+# which will count down each column in turn
+# or like this [i, j]
+# to select the item at the i'th row, j'th column
+
+my_mat <- matrix(c(1:9), ncol = 3)
+my_mat[2, 3]
+my_mat[8]
+
+```
+
+### Attributes
+
+
+### **Lists**
+The elements of a list contain other data structures. You can have different structures and different types in one list:
+vectors, matrices, other lists, functions... 
+
+#### Selecting from a list: ```[[]]``` and ```[]```
+
+```{r}
+my_list <- list(logical_v, char_v)
+
+my_list[1] # gets you a slice of the list (it's called a slice in other languages too)
+# it returns you part of your original list, as a list. Clearer if you select more than one element:
+my_list[c(1,2)]
+
+my_list[[1]] # gets out the element itself. 
+# It's like the double bracket selects the slice and then the element out of that slice.
+
+# You can give the elements in the list names when you create it:
+my_list <- list(logicals = logical_v, chars = char_v)
+my_list
+
+
+```
+(http://www.r-tutor.com/r-introduction/list) for a basic introduction.
+Question: why can't you pass a vector into ```my_list[[]]``` ? What would you be trying to do, if you were, and does that make sense?
+
+
+### **dataframes**: a special case of a list
+Every element is a vector of the same length, and can be different types
+
+each column in a dataframe is one type -
+i.e. you should be able to select a column and treat it like a vector (because it is one)
+
+given that R has been developed for scientists, imagine a structure like a results table for recording outcomes of your experiments.
+
+my_df <- 
+
+
+## A note on data formats
+#### Wide and long
+
+
+# functions
+
+A function takes in *arguments* and does "something" with them. We've used the function ```c()``` to combine the arguments that you give it, into a vector. We've also seen that functions expect appropriate inputs; the arguments you give, if not as the function requires, might be coerced to that type if possible, or you might get an error.
+
+```{r}
+mean(c(1,2,3,4,5)) # the argument here is a numeric vector - created within the parentheses
+mean(double_v)     # you can just pass in the name of a variable, as long as it exists in your environment.
+
+```
+
+
+ output
+
+# assigning
+
+# the help file for a function
+```?function```
+
+
+arguments of a function, can be functions: simple example is apply
+
+make your own function:
+```{r}
+# Going to make a function which takes in a character vector, and says Hi.
+
+greetings <- function(x) { # function takes in 1 argument
+                           # the argument gets assigned the name x within the environment of the function
+
+ hello <- paste("Hi", x, "!")
+ return(hello)  
+
+}
+
+
+greetings("julia")
+greetings(c("julia", "bob"))
+greetings(1)
+
+greetings <- function(x, hi_bye) { # function takes in 2 arguments
+
+# this line checks whether the variable hi_bye matches the character string "h
+     
+ if (hi_bye == "hi") { 
+  greeting <- paste("Hi", x, "!")
+ } 
+  
+ if (hi_bye == "bye") {
+  greeting <- paste("Bye", x, "!")
+ }
+ 
+ return(greeting)  
+
+}
+
+# greetings("J", "hello")
+
+
+```
+
+Very soon, you'll be writing your own functions!
+If you get stuck...
+
+
+# Base R and packages
+
+"Base R"" comes with the default installation, and can do quite a lot.
+
+## packages
+A package is a collection of functions (and sometimes data), developed for particular uses.
+You can think of the R "library" as containing many packages.
+
+```install.packages()```: installs packages
+```library()``` takes a package name and loads it, if installed, meaning you can use the functions in it. 
+
+
+## plotting
+## tidyverse
+
+##Where to find help and learning resources
+
+help within R: ?
+# help on the internet: manuals for packages/libraries
+# vignettes
+
+really, people who "do programming" for a living, do a lot of searching the internet!
+
+Bear in mind that R, and even more so certain packages, change fast! This often means that someone else will be writing something to solve an issue that you've been having, and the next time you look for help, you might find something new. (This also means when you search the internet for help, you should check whether what you find is still valid.)
+
+
+
+
+
+###free, online, books:
+https://adv-r.hadley.nz/ #Second edition
+
+
+
+
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
