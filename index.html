@@ -273,7 +273,7 @@ div.tocify {
 <p> </p>
 </div>
 <div id="things-to-know" class="section level1">
-<h1><span class="header-section-number">2</span> Things to know:</h1>
+<h1><span class="header-section-number">2</span> Things to know</h1>
 <p>No-one memorises everything! If you know how to look up what you want to do, and understand what you find, you’re most of the way there.</p>
 <div id="when-writing-your-own-code" class="section level2">
 <h2><span class="header-section-number">2.1</span> When writing your own code</h2>
@@ -292,7 +292,7 @@ div.tocify {
 <h2><span class="header-section-number">2.2</span> Not covered here</h2>
 <p>Many concepts in programming and R are not covered (or not in any detail): of note,</p>
 <ul>
-<li>if/else statements, loops &lt;<a href="https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r" class="uri">https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r</a></li>
+<li>if/else statements, loops <a href="https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r" class="uri">https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r</a></li>
 <li>data structures with more than 2 dimensions</li>
 <li>Tibbles</li>
 <li>Tidyverse</li>
@@ -329,8 +329,11 @@ See <a href="http://ncss-tech.github.io/stats_for_soil_survey/chapters/1_introdu
 <li>decide on a working directory, especially if you will load data from files, and/or have multiple scripts
 <ul>
 <li>it’s good to keep files associated with your work in one place</li>
+<li>type <code>setwd(&quot;C:/[insert path here]&quot;)</code></li>
 </ul></li>
 </ul>
+<pre class="r"><code>setwd(&quot;C:/mydocs/mynewproject&quot;) # in Windows, use / for a separator
+setwd(&quot;~/mydocs/mynewproject&quot;) # linux/ mac</code></pre>
 <p>You’ll mostly type or copy into your script, like writing a text file; and then run (all or some of it). Output will appear in the console, plots in the plot panel, and as you create variables, they’ll appear in the environment panel.</p>
 <p>If you’re re-opening RStudio, having worked in it before: RStudio can save your open scripts and the contents of your environment, which can help if it was closed unexpectedly but beware that you should not rely on anything specifically being saved.</p>
 <p></p>
@@ -538,11 +541,13 @@ require(reshape2)</code></pre>
 <p>A function takes in inputs, called <em>arguments</em>, and does “something” with them. <code>c()</code> combines what you give it, into a vector. Functions generally expect particular types of input; arguments you give, might be coerced to that type or structure if possible, or you might get an error.</p>
 <p>Generally, you’ll want to run a function and store the output - i.e. assign it to a name so you can use it somewhere else.</p>
 <pre class="r"><code>mean(c(1,2,3,4,5))            # the argument here is a numeric vector - created within the parentheses
-my_mean &lt;- mean(min_temperature)     # you can just pass in the name of a variable, as long as it exists in your environment.</code></pre>
+my_mean &lt;- mean(min_temperature)     # you can just pass in the name of a variable, as long as it exists in your environment.
+
+# some functions look a bit different, e.g. +
+1 + 2 # here, you are applying the function '+', to the arguments 1 and 2. For some functions, this is intuitive syntax.</code></pre>
 <div id="vectorisation" class="section level2">
 <h2><span class="header-section-number">7.1</span> Vectorisation</h2>
-<p>Many functions can take a vector as input and the function is then applied to each element in turn.</p>
-<p><a href="https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r" class="uri">https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r</a></p>
+<p>Many functions can take a vector as input. Either the function is applied using the whole vector, such as the <code>mean()</code> example, or functions can be applied element-by-element. <a href="https://bookdown.org/rdpeng/rprogdatascience/vectorized-operations.html" class="uri">https://bookdown.org/rdpeng/rprogdatascience/vectorized-operations.html</a> shows a couple of examples.</p>
 </div>
 <div id="reading-the-help-file-for-a-function" class="section level2">
 <h2><span class="header-section-number">7.2</span> Reading the help file for a function</h2>
